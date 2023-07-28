@@ -1,0 +1,24 @@
+options pageno=1;
+data threefct;
+input rep a b yield;
+datalines;
+
+
+;;
+proc print;
+title 'Printout of 3-factor Data';
+run;
+*COMMENT:  ANOVA for A whole plot, B factorial arrangement for subplot.  
+All factors are fixed effects;
+proc anova;
+classes rep a b ;
+model yield=rep a a(rep) b a*b;
+*COMMENT:  a(rep) is Error(a);
+test h=a e=a(rep);
+means a/lsd e=a(rep);
+means b/lsd;
+means a*b;
+title1 'ANOVA for A whole plot, BxC factorial arrangement for
+subplot';
+title2 'All factors fixed';
+run;

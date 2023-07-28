@@ -1,0 +1,44 @@
+
+%INCLUDE 'C:\Users\Xiao\Desktop\Data\5. SAS\Non-parametric\One-way layout\LD_CI.SAS';
+options ls =100 ps= 1000 nodate nocenter nonumber;
+data sara;
+
+input rep a $ b $ c $ sev ;
+treatment=100*a+10*b+c;
+subject=1000*rep+treatment;
+datalines;
+
+;
+run;
+
+proc print data=sara;
+run;
+
+
+
+proc rank data=sara out=sara;
+var sev; *requests ranks for disease ratings;
+ranks r; *ranks are stored under the variable r;
+run;
+
+
+
+ods rtf file='your file name here .rtf';
+
+proc sort data=sara out=sara;
+by a b c; 
+run;
+
+proc mixed data=sara anovaf method=MIVQUE0;
+class a b c;
+model r=a|b|c/chisq;
+repeated/type=un(1) group=a*b*c;
+lsmeans a|b|c;
+run; 
+
+%ld_ci (data=sara,var=sev,group=treatment,alpha=0.05,subject=subject);
+run;
+
+ods rtf close;
+quit;
+

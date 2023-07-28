@@ -1,0 +1,18 @@
+
+options pageno=1;
+data factor;
+input a	b  rep	yield;
+datalines;
+
+;;
+proc print;
+title 'Printout of Factorial Data';
+run;
+
+proc anova;
+classes a b;
+model yield=a b a*b;
+means a b/lsd;
+means a*b;
+title 'ANOVA assuming A and B are fixed effects';
+run;

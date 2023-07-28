@@ -1,0 +1,10 @@
+proc mixed data=sara method=type3;
+class isolate fungicide;
+model AUDPC=isolate fungicide isolate*fungicide;
+store sara2;
+run;
+
+proc glm restore=sara2;
+lsmeans fungicide*isolate/adjust=turkey;
+run;
+
